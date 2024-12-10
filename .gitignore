@@ -1,0 +1,5 @@
+.env
+*.csv
+*.pbix
+*.xlsx
+*.url
