@@ -58,7 +58,6 @@ def lookup_person(email):
     params = {
         'company_domain': domain,
         'first_name': first_name,
-        'similarity_checks': 'include',
         'enrich_profile': 'enrich',
     }
     return request_linkedIn(url, params)
@@ -100,7 +99,7 @@ def main():
         print(company_data)
 
         json_object = json.dumps(company_data, indent=4)
-        with open("company.json", "w") as outfile:
+        with open(f"{email}_company.json", "w") as outfile:
             outfile.write(json_object)
     else:
         print("Nenhuma empresa encontrada para este domínio.")
@@ -109,7 +108,7 @@ def main():
         print("Dados do profissional encontrados:")
         print(person_data)
         json_object = json.dumps(person_data, indent=4)
-        with open("person.json", "w") as outfile:
+        with open(f"{email}_person.json", "w") as outfile:
             outfile.write(json_object)
     else:
         print("Nenhum profissional encontrado.")    
