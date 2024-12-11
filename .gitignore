@@ -1,5 +1,7 @@
+__pycache__
 .env
 *.csv
 *.pbix
 *.xlsx
 *.url
+*.json

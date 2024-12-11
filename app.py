@@ -1,11 +1,11 @@
 import os
 import requests
+import json
 from dotenv import load_dotenv
 
 # Carregar as variáveis do arquivo .env
 load_dotenv()
 
-# Função para verificar se o domínio é corporativo
 def is_corporate_domain(email):
     # Lista de domínios genéricos que não são corporativos
     generic_domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com']
@@ -81,38 +81,39 @@ def get_person_data(person_url):
     return request_linkedIn(url, params)
 
 # Função principal
-def main():
-  
-    email = input("Informe o e-mail: ")
-
+def fetch_data(email):
     if not is_corporate_domain(email):
-        print("Este não é um domínio corporativo.")
-        return
+        return None, None, None
 
     company_data = lookup_company(email)
+    person_data = lookup_person(email)
+
+    return company_data, person_data      
+
+def main():  
+    email = input("Informe o e-mail: ")
+
+    company_data, person_data = fetch_data(email)
 
     if company_data:
         print("Dados da Empresa Encontrados:")
         print(company_data)
 
-        #company_url = company_data['url']
-        #employees = employee_count(company_url)
-        #print("\n\nColaboradores:")
-        #print(employees)
+        json_object = json.dumps(company_data, indent=4)
+        with open("company.json", "w") as outfile:
+            outfile.write(json_object)
     else:
         print("Nenhuma empresa encontrada para este domínio.")
-
-    person_data = lookup_person(email)
 
     if person_data:
         print("Dados do profissional encontrados:")
         print(person_data)
-
-        person_url = person_data['url']
-        profile = get_person_data(person_url)
-        print(profile)
+        json_object = json.dumps(person_data, indent=4)
+        with open("person.json", "w") as outfile:
+            outfile.write(json_object)
     else:
-        print("Nenhum profissional encontrado.")        
+        print("Nenhum profissional encontrado.")    
+  
 
 if __name__ == "__main__":
     main()
